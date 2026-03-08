@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Loan Approval Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body{
+            font-family: Arial;
+            background:#0f172a;
+            color:white;
+            text-align:center;
+            padding:20px;
+        }
+
+        h1{
+            margin-bottom:20px;
+        }
+
+        .form-box{
+            background:#1e293b;
+            padding:20px;
+            border-radius:10px;
+            width:300px;
+            margin:auto;
+        }
+
+        select,input,button{
+            width:100%;
+            padding:8px;
+            margin:8px 0;
+            border-radius:5px;
+            border:none;
+        }
+
+        button{
+            background:#22c55e;
+            color:white;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#16a34a;
+        }
+
+        table{
+            width:80%;
+            margin:30px auto;
+            border-collapse:collapse;
+        }
+
+        th,td{
+            padding:10px;
+            border:1px solid white;
+        }
+
+        th{
+            background:#334155;
+        }
+
+        .approved{
+            color:#22c55e;
+            font-weight:bold;
+        }
+
+        .rejected{
+            color:#ef4444;
+            font-weight:bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Company Loan Approval Dashboard</h1>
+
+<div class="form-box">
+    <input type="number" id="empId" placeholder="Employee ID">
+
+    <select id="income">
+        <option value="">Select Income</option>
+        <option value="High">High</option>
+        <option value="Low">Low</option>
+    </select>
+
+    <select id="credit">
+        <option value="">Select Credit Score</option>
+        <option value="Good">Good</option>
+        <option value="Poor">Poor</option>
+    </select>
+
+    <select id="employment">
+        <option value="">Select Employment</option>
+        <option value="Employed">Employed</option>
+        <option value="Unemployed">Unemployed</option>
+    </select>
+
+    <button onclick="checkLoan()">Check Loan Approval</button>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Income</th>
+            <th>Credit Score</th>
+            <th>Employment</th>
+            <th>Loan Status</th>
+        </tr>
+    </thead>
+    <tbody id="resultTable">
+    </tbody>
+</table>
+
+<script>
+
+function checkLoan(){
+
+    let id = document.getElementById("empId").value;
+    let income = document.getElementById("income").value;
+    let credit = document.getElementById("credit").value;
+    let employment = document.getElementById("employment").value;
+
+    if(id=="" || income=="" || credit=="" || employment==""){
+        alert("Please fill all fields");
+        return;
+    }
+
+    // Loan Approval Logic
+    // Condition:
+    // 1. Income High AND Credit Good AND Employed -> Approved
+    // 2. Income Low but Credit Good AND Employed -> Approved
+    // Otherwise -> Rejected
+
+    let status;
+
+    if((income=="High" && credit=="Good" && employment=="Employed") ||
+       (income=="Low" && credit=="Good" && employment=="Employed")){
+        status = "<span class='approved'>Approved</span>";
+    }else{
+        status = "<span class='rejected'>Rejected</span>";
+    }
+
+    let table = document.getElementById("resultTable");
+
+    let row = `
+        <tr>
+            <td>${id}</td>
+            <td>${income}</td>
+            <td>${credit}</td>
+            <td>${employment}</td>
+            <td>${status}</td>
+        </tr>
+    `;
+
+    table.innerHTML += row;
+
+    // Clear form
+    document.getElementById("empId").value="";
+    document.getElementById("income").value="";
+    document.getElementById("credit").value="";
+    document.getElementById("employment").value="";
+}
+
+</script>
+
+</body>
+</html>

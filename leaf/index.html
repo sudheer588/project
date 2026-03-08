@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Advanced Leaf</title>
+
+<style>
+body{
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(to right,#134e5e,#71b280);
+    color:white;
+}
+
+.home{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.home h1{
+    font-size:55px;
+    margin-bottom:20px;
+}
+
+button{
+    padding:12px 30px;
+    font-size:18px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#00c853;
+    color:white;
+}
+
+.container{
+    display:none;
+    padding:30px;
+}
+
+.dashboard{
+    display:flex;
+    gap:20px;
+}
+
+.left, .right{
+    flex:1;
+    background:white;
+    color:black;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.3);
+    position:relative;
+}
+
+.left img{
+    width:100%;
+    margin-top:10px;
+    border-radius:10px;
+}
+
+/* Instagram Style Card */
+.insta-card{
+    position:absolute;
+    bottom:10px;
+    right:10px;
+    background:rgba(0,0,0,0.8);
+    color:white;
+    padding:12px;
+    border-radius:12px;
+    font-size:14px;
+}
+
+/* BIG REALISTIC ANALYSIS FONT */
+.analysis-title{
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:15px;
+    color:#134e5e;
+}
+
+.analysis-value{
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.highlight{
+    font-size:26px;
+    font-weight:bold;
+    color:#2e7d32;
+}
+
+/* CENTER COLOR REPORT */
+.center-color-report{
+    margin:30px auto;
+    width:70%;
+    background:white;
+    color:black;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 0 15px rgba(0,0,0,0.4);
+}
+
+.color-box{
+    display:flex;
+    justify-content:space-around;
+    margin-top:20px;
+}
+
+.color{
+    padding:15px;
+    border-radius:10px;
+    color:white;
+    font-weight:bold;
+    font-size:18px;
+    width:120px;
+}
+
+.green{background:green;}
+.yellow{background:gold;color:black;}
+.brown{background:brown;}
+.red{background:red;}
+
+.report-buttons{
+    margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="home" id="homePage">
+    <h1>🌿 Advanced Leaf</h1>
+    <button onclick="startAnalysis()">Start Analysis</button>
+</div>
+
+<div class="container" id="analysisPage">
+
+    <h2>Leaf Analysis Dashboard</h2>
+
+    <div class="dashboard">
+
+        <!-- LEFT SIDE -->
+        <div class="left">
+            <h3>Upload Leaf Image</h3>
+            <input type="file" id="imageInput" accept="image/*">
+            <img id="previewImage">
+            <canvas id="canvas" style="display:none;"></canvas>
+
+            <div class="insta-card" id="instaInfo">
+                Condition: - <br>
+                Colour: - <br>
+                Texture: -
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="right">
+            <div class="analysis-title">📊 Analysis Result</div>
+            <div id="result"></div>
+        </div>
+
+    </div>
+
+    <!-- CENTERED COLOUR REPORT -->
+    <div class="center-color-report">
+        <h3>🎨 Colour Detection Report</h3>
+        <div class="color-box">
+            <div class="color green" id="greenBox">Green: 0%</div>
+            <div class="color yellow" id="yellowBox">Yellow: 0%</div>
+            <div class="color brown" id="brownBox">Brown: 0%</div>
+            <div class="color red" id="redBox">Red: 0%</div>
+        </div>
+    </div>
+
+    <!-- Disease Section -->
+    <div style="margin-top:20px; background:white; color:black; padding:25px; border-radius:15px;">
+        <h3 style="font-size:26px;">🦠 Disease Detection</h3>
+        <div id="diseaseSection" style="font-size:20px; font-weight:bold;"></div>
+    </div>
+
+    <div class="report-buttons">
+        <button onclick="downloadReport()">Download Full Report</button>
+        <button onclick="window.print()">Print Report</button>
+    </div>
+
+</div>
+
+<script>
+
+function startAnalysis(){
+    document.getElementById("homePage").style.display="none";
+    document.getElementById("analysisPage").style.display="block";
+}
+
+document.getElementById("imageInput").addEventListener("change", function(event){
+
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(){
+        const img = document.getElementById("previewImage");
+        img.src = reader.result;
+
+        img.onload = function(){
+            analyzeLeaf(img);
+        }
+    }
+    reader.readAsDataURL(file);
+});
+
+function analyzeLeaf(img){
+
+    const canvas=document.getElementById("canvas");
+    const ctx=canvas.getContext("2d");
+
+    canvas.width=img.naturalWidth;
+    canvas.height=img.naturalHeight;
+    ctx.drawImage(img,0,0);
+
+    const data=ctx.getImageData(0,0,canvas.width,canvas.height).data;
+
+    let green=0,yellow=0,brown=0,red=0;
+
+    for(let i=0;i<data.length;i+=4){
+        let r=data[i];
+        let g=data[i+1];
+        let b=data[i+2];
+
+        if(g>r && g>b) green++;
+        else if(r>200 && g>200) yellow++;
+        else if(r>120 && g<100) red++;
+        else if(r>100 && g<100 && b<80) brown++;
+    }
+
+    let total=canvas.width*canvas.height;
+
+    let gP=((green/total)*100).toFixed(2);
+    let yP=((yellow/total)*100).toFixed(2);
+    let bP=((brown/total)*100).toFixed(2);
+    let rP=((red/total)*100).toFixed(2);
+
+    document.getElementById("greenBox").innerText="Green: "+gP+"%";
+    document.getElementById("yellowBox").innerText="Yellow: "+yP+"%";
+    document.getElementById("brownBox").innerText="Brown: "+bP+"%";
+    document.getElementById("redBox").innerText="Red: "+rP+"%";
+
+    let area = img.naturalWidth*img.naturalHeight;
+
+    document.getElementById("result").innerHTML=`
+        <div class="analysis-value">Width: <span class="highlight">${img.naturalWidth}px</span></div>
+        <div class="analysis-value">Height: <span class="highlight">${img.naturalHeight}px</span></div>
+        <div class="analysis-value">Area: <span class="highlight">${area}px²</span></div>
+        <div class="analysis-value">Image Quality: <span class="highlight">${area>800000?"High Resolution":"Medium Resolution"}</span></div>
+    `;
+
+    let disease="Healthy Leaf";
+    if(yP>20) disease="Nutrient Deficiency";
+    if(bP>15) disease="Fungal Infection";
+
+    document.getElementById("instaInfo").innerHTML=`
+        Condition: ${gP>60?"Fresh":"Weak"} <br>
+        Colour: ${gP>yP?"Green":"Yellow"} <br>
+        Texture: ${bP>10?"Rough":"Smooth"}
+    `;
+
+    document.getElementById("diseaseSection").innerHTML=`
+        Disease: ${disease} <br>
+        Recommended Solution: ${disease==="Healthy Leaf"?"No treatment required":"Apply proper treatment immediately"}
+    `;
+}
+
+function downloadReport(){
+    let text = document.getElementById("analysisPage").innerText;
+    const blob = new Blob([text],{type:"text/plain"});
+    const link=document.createElement("a");
+    link.href=URL.createObjectURL(blob);
+    link.download="Advanced_Leaf_Report.txt";
+    link.click();
+}
+
+</script>
+
+</body>
+</html>
