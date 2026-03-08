@@ -1,0 +1,222 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: backgroundShift 10s ease infinite alternate;
+}
+
+@keyframes backgroundShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.container {
+  background: white;
+  width: 700px;
+  padding: 100px;
+  text-align: center;
+  border-radius: 15px;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 1s ease forwards;
+  opacity: 0;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 20px;
+  background: linear-gradient(45deg, #ff6ec4, #7873f5, #42e695, #fbc2eb);
+  background-size: 400% 400%;
+  z-index: -1;
+  animation: borderAnimation 8s linear infinite;
+}
+
+@keyframes borderAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+h1 {
+  margin-bottom: 5px;
+  animation: slideDown 0.8s ease forwards;
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+  animation: slideDown 1s ease forwards;
+  transform: translateY(-20px);
+  opacity: 0;
+  animation-delay: 0.2s;
+}
+
+@keyframes slideDown {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ===================== */
+/* NEW: INPUT + VOICE UI */
+/* ===================== */
+
+.input-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.input-group input {
+  width: 75%;
+}
+
+/* Voice button */
+.voice-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  background: #5b2d8b;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.voice-btn:hover {
+  background: #7d4bbd;
+  transform: scale(1.15);
+  box-shadow: 0 0 15px rgba(91, 45, 139, 0.5);
+}
+
+/* ===================== */
+/* EXISTING INPUT STYLE  */
+/* ===================== */
+
+input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(91, 45, 139, 0.3);
+  outline: none;
+}
+
+button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background: #5b2d8b;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.1);
+  background: #7d4bbd;
+}
+
+.card {
+  background: #f6f0ff;
+  margin-top: 70px;
+  padding: 15px;
+  border-radius: 50px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+#message {
+  font-weight: bold;
+  margin-bottom: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  position: relative;
+  animation: typing 2s steps(30, end) forwards;
+}
+
+#message::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background-color: #5b2d8b;
+  animation: blink 0.7s step-start infinite;
+}
+
+#message::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 100%;
+  background-color: rgba(255, 245, 157, 0.5);
+  transform: translateX(0);
+  animation: cursorHighlight 2s steps(30, end) forwards;
+  pointer-events: none;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes cursorHighlight {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+ul {
+  text-align: left;
+  padding-left: 20px;
+  animation: fadeInText 1s ease forwards;
+  opacity: 0;
+  animation-delay: 0.7s;
+}
+
+@keyframes fadeInText {
+  to { opacity: 1; }
+}

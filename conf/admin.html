@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard</title>
+<style>
+body{
+font-family: Arial;
+background:#f5f6fa;
+margin:0;
+}
+
+.header{
+background:#5a4af4;
+color:white;
+padding:15px;
+text-align:center;
+font-size:22px;
+}
+
+.container{
+padding:20px;
+}
+
+input, textarea{
+width:100%;
+padding:10px;
+margin:8px 0;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+button{
+padding:8px 12px;
+margin:4px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+.addBtn{
+background:#5a4af4;
+color:white;
+}
+
+.editBtn{
+background:#27ae60;
+color:white;
+}
+
+.deleteBtn{
+background:#e74c3c;
+color:white;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+background:white;
+}
+
+th, td{
+border:1px solid #ddd;
+padding:10px;
+text-align:left;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+Admin Dashboard - Confidence Booster
+</div>
+
+<div class="container">
+
+<h3>Add / Update Motivational Message</h3>
+
+<input type="text" id="emotion" placeholder="Enter Emotion">
+
+<textarea id="message" placeholder="Enter Motivational Message"></textarea>
+
+<button class="addBtn" onclick="addData()">Save Message</button>
+
+<table id="dataTable">
+<tr>
+<th>Emotion</th>
+<th>Message</th>
+<th>Actions</th>
+</tr>
+</table>
+
+</div>
+
+<script>
+
+let selectedRow = null;
+
+function addData(){
+
+let emotion = document.getElementById("emotion").value;
+let message = document.getElementById("message").value;
+
+if(emotion=="" || message==""){
+alert("Please fill all fields");
+return;
+}
+
+if(selectedRow == null){
+
+let table = document.getElementById("dataTable");
+
+let row = table.insertRow();
+
+row.insertCell(0).innerHTML = emotion;
+row.insertCell(1).innerHTML = message;
+
+row.insertCell(2).innerHTML =
+'<button class="editBtn" onclick="editData(this)">Edit</button>' +
+'<button class="deleteBtn" onclick="deleteData(this)">Delete</button>';
+
+}
+else{
+
+selectedRow.cells[0].innerHTML = emotion;
+selectedRow.cells[1].innerHTML = message;
+selectedRow = null;
+
+}
+
+document.getElementById("emotion").value="";
+document.getElementById("message").value="";
+}
+
+function editData(btn){
+
+selectedRow = btn.parentElement.parentElement;
+
+document.getElementById("emotion").value = selectedRow.cells[0].innerHTML;
+document.getElementById("message").value = selectedRow.cells[1].innerHTML;
+
+}
+
+function deleteData(btn){
+
+let row = btn.parentElement.parentElement;
+row.remove();
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Confidence booster App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>🌱 Confidence Booster</h1>
+  <p class="subtitle">Type or say how you feel</p>
+
+  <!-- Input with Voice Button -->
+  <div class="input-group">
+    <input
+      type="text"
+      id="emotionInput"
+      placeholder="Enter your emotion or say 'Hi'"
+      autocomplete="off"
+    >
+    <button
+      class="voice-btn"
+      onclick="startVoice()"
+      aria-label="Start voice assistant"
+      title="Click and say Hi"
+    >
+      🎤
+    </button>
+  </div>
+
+  <!-- Voice status -->
+  <p id="voiceStatus" style="font-size:14px;color:#666;margin-bottom:10px;">
+    Click the mic and say “Hi”
+  </p>
+
+  <button onclick="checkEmotion()">Set your mood</button>
+
+  <div class="card">
+    <p id="message">Your message will appear here.</p>
+    <ul id="tasks"></ul>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
